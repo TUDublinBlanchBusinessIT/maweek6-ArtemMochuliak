@@ -5,24 +5,33 @@ import DatePicker from '../components/DatePicker';
 
 import {useState} from 'react';
 
-export default function MovieBooking({screenstyle}) {
-  const [movieChoice, setMovieChoice] = useState("");
-  const [totalTickets, setTotaltickets] = useState(1);
-  const [balcony, setBalcony] = useState(false);
-  const [movieDate, setMoviedate] = useState(new Date());
+export default function MovieBooking({screenstyle, data, setData}) {
+
   const [movieList, setMovieList] = useState([
    {'id': 1, "title": "Kneecap", "age": 16},
    {'id' : 2, "title": "Joker, Folie a Deux", "age": 18}, 
    {'id': 3, "title": "Deadpool and Wolverine", "age": 12}
   ]);
+
+
+
+
+ function handleChangeMovieTitle(newTitle) {
+    setData(data => ({
+      ...data, 
+      movieTitle: newTitle 
+    }));
+  };
+
+
   return (
     <View style={screenstyle}>    
       <Text style={styles.label}>Choose Movie</Text>
       <Picker style={styles.textbox}
-        selectedValue={movieChoice}
-        onValueChange={(itemValue) => setMovieChoice(itemValue)}>
+        selectedValue={data.movieTitle}
+        onValueChange={(itemValue) => handleChangeMovieTitle(itemValue)}>
         { movieList.map((movie) => {
-          return <Picker.Item label={movie.title} value={movie.title}/>
+          return <Picker.Item key={movie.id} label={movie.title} value={movie.title}/>
           })}
       </Picker>
       <DatePicker thisDate={movieDate} setThisdate={setMoviedate} datelabel="Showing Date" />
