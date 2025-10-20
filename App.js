@@ -1,3 +1,6 @@
+import * as Crypto from 'expo-crypto';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert, TouchableOpacity, Text } from 'react-native';
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
@@ -7,6 +10,8 @@ import MovieBooking from './components/MovieBooking';
 
 export default function App() {
 
+  var uuid = Crypto.randomUUID();//this uses the Crypto library to generate a Universal Unique Identifier
+
   const [booking, setBooking] = useState({
       bookDate: "2000-02-02",
       movieTitle: "",
@@ -14,6 +19,14 @@ export default function App() {
       balcony: 0,
   });
 
+
+
+  async function saveData() {
+    const uuid = Crypto.randomUUID(); 
+    await AsyncStorage.setItem(uuid, JSON.stringify(booking));
+    alert("Saved with UUID: " + uuid);
+    Alert.alert("Saved with UUID: " + uuid);
+  }
   
   return (
     <View style={styles.screencontainer}>
@@ -22,6 +35,11 @@ export default function App() {
           <PersonalInfo screenstyle={styles.screen} data = {booking} setData = {setBooking}/>
           <MovieBooking screenstyle={styles.screen} data  = {booking} setData = {setBooking} />
       </Swiper>
+
+
+      <TouchableOpacity onPress={saveData}>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>Save Data</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -44,5 +62,7 @@ const styles = StyleSheet.create({
     alignItems: "start",
     padding: "10%"
   }
+
+ 
 
 });
